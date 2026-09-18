@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-recommendation}
+      POSTGRES_USER: ${DB_USERNAME:-recommendation}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-recommendation}
+    ports:
+      - "5432:5432"
+    volumes:
+      - recommendation-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-recommendation} -d ${DB_NAME:-recommendation}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  recommendation-postgres-data:
